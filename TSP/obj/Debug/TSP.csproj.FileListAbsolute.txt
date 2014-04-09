@@ -1,0 +1,10 @@
+C:\Users\ringger\Documents\BYU\Winter2010-312\Projects\Project7-TSPBranchAndBound\TSPBranchAndBound\TSP\obj\Debug\TSP.exe
+C:\Users\ringger\Documents\BYU\Winter2010-312\Projects\Project7-TSPBranchAndBound\TSPBranchAndBound\TSP\obj\Debug\TSP.pdb
+F:\CS312TA\TSPBranchAndBound\TSP\obj\Debug\TSP.exe
+F:\CS312TA\TSPBranchAndBound\TSP\obj\Debug\TSP.pdb
+F:\CS312TA\TSPBranchAndBound\TSP\bin\Debug\TSP.exe
+F:\CS312TA\TSPBranchAndBound\TSP\bin\Debug\TSP.pdb
+F:\CS312TA\TSPBranchAndBound\TSP\obj\Debug\ResolveAssemblyReference.cache
+F:\CS312TA\TSPBranchAndBound\TSP\obj\Debug\TSP.Form1.resources
+F:\CS312TA\TSPBranchAndBound\TSP\obj\Debug\TSP.Properties.Resources.resources
+F:\CS312TA\TSPBranchAndBound\TSP\obj\Debug\TSP.csproj.GenerateResource.Cache
