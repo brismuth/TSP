@@ -319,16 +319,20 @@ namespace TSP
 			{
 				double bound = 0;
 
+				// Consider each row.
 				for (int i = 0; i < matrix.GetLength(0); i++)
 				{
+					// Find the lowest value in the row.
 					double lowest = Double.PositiveInfinity;
 					for (int j = 0; j < matrix.GetLength(1); j++)
 					{
 						if (matrix[i, j] < lowest) lowest = matrix[i, j];
 					}
 
+					// If it's already reduced, move on.
 					if (lowest == 0 || Double.IsPositiveInfinity(lowest)) continue;
 
+					// Reduce each cell by the lowest value.
 					for (int j = 0; j < matrix.GetLength(1); j++)
 					{
 						matrix[i, j] -= lowest;
@@ -345,16 +349,20 @@ namespace TSP
 			{
 				double bound = 0;
 
+				// Consider each column.
 				for (int j = 0; j < matrix.GetLength(0); j++)
 				{
+					// Lowest value in the column.
 					double lowest = Double.PositiveInfinity;
 					for (int i = 0; i < matrix.GetLength(1); i++)
 					{
 						if (matrix[i, j] < lowest) lowest = matrix[i, j];
 					}
 
+					// If already reduced, move on.
 					if (lowest == 0 || Double.IsPositiveInfinity(lowest)) continue;
 
+					// Reduce each cell in the column by the lowest value.
 					for (int i = 0; i < matrix.GetLength(1); i++)
 					{
 						matrix[i, j] -= lowest;
@@ -373,10 +381,12 @@ namespace TSP
 
 			public void IncludeEdge(int i, int j)
 			{
+				// Set all cells in the given column to infinity.
 				for (int _i = 0; _i < matrix.GetLength(0); _i++) {
 					matrix[_i, j] = Double.PositiveInfinity;
 				}
 
+				// Set all cells in the given row to infinity.
 				for (int _j = 0; _j < matrix.GetLength(1); _j++) {
 					matrix[i, _j] = Double.PositiveInfinity;
 				}
