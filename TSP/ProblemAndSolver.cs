@@ -63,7 +63,7 @@ namespace TSP
         /// <summary>
         /// a route through the current problem, useful as a temporary variable. 
         /// </summary>
-        private ArrayList Route;
+//        private ArrayList Route;
         /// <summary>
         /// best solution so far. 
         /// </summary>
@@ -132,7 +132,7 @@ namespace TSP
         private void resetData()
         {
             Cities = new City[_size];
-            Route = new ArrayList(_size);
+//            Route = new ArrayList(_size);
             bssf = null; 
 
             for (int i = 0; i < _size; i++)
@@ -276,156 +276,6 @@ namespace TSP
                 return -1D; 
         }
 		
-		private class State:IComparable<State>
-		{
-			public CostMatrix costMatrix;
-			public int lowerBound;
-			public int depth;
-			public Dictionary<City, City> edges;
-			
-			public State(CostMatrix costMatrix, int lowerBound, int depth, Dictionary<City, City> edges)
-			{
-				this.costMatrix = costMatrix;
-				this.lowerBound = lowerBound;
-				this.depth = depth;
-				this.edges = edges;
-			}
-			
-			public TSPSolution getRoute()
-			{
-				ArrayList route = new ArrayList();
-				City startCity = Enumerable.ToList(edges.Keys)[0];
-				City curCity = startCity;
-				bool fullroute = false;
-				do
-				{
-					route.Add(curCity);
-					curCity = edges[curCity];
-				}
-				while (curCity != startCity);
-				
-				return new TSPSolution(route);
-			}
-			
-			public int CompareTo(State state)
-			{
-				return state.lowerBound.CompareTo(lowerBound);
-			}
-		}
-		
-		private class CostMatrix
-		{
-			private double[,] matrix;
-
-			public CostMatrix(City[] cities)
-			{
-				matrix = new double[cities.Length,cities.Length];
-
-				for (int i = 0; i < cities.Length; i++)
-				{
-					for (int j = 0; j < cities.Length; j++)
-					{
-						if (i == j) matrix[i,j] = Double.PositiveInfinity;
-						matrix[i,j] = cities[i].costToGetTo(cities[j]);
-					}
-				}
-			}
-
-			public CostMatrix(double[,] matrix)
-			{
-				this.matrix = matrix;
-			}
-
-			public double ReduceRows()
-			{
-				double bound = 0;
-
-				// Consider each row.
-				for (int i = 0; i < matrix.GetLength(0); i++)
-				{
-					// Find the lowest value in the row.
-					double lowest = Double.PositiveInfinity;
-					for (int j = 0; j < matrix.GetLength(1); j++)
-					{
-						if (matrix[i, j] < lowest) lowest = matrix[i, j];
-					}
-
-					// If it's already reduced, move on.
-					if (lowest == 0 || Double.IsPositiveInfinity(lowest)) continue;
-
-					// Reduce each cell by the lowest value.
-					for (int j = 0; j < matrix.GetLength(1); j++)
-					{
-						matrix[i, j] -= lowest;
-					}
-
-					bound += lowest;
-				}
-
-				return bound;
-			}
-
-
-			public double ReduceColumns()
-			{
-				double bound = 0;
-
-				// Consider each column.
-				for (int j = 0; j < matrix.GetLength(0); j++)
-				{
-					// Lowest value in the column.
-					double lowest = Double.PositiveInfinity;
-					for (int i = 0; i < matrix.GetLength(1); i++)
-					{
-						if (matrix[i, j] < lowest) lowest = matrix[i, j];
-					}
-
-					// If already reduced, move on.
-					if (lowest == 0 || Double.IsPositiveInfinity(lowest)) continue;
-
-					// Reduce each cell in the column by the lowest value.
-					for (int i = 0; i < matrix.GetLength(1); i++)
-					{
-						matrix[i, j] -= lowest;
-					}
-
-					bound += lowest;
-				}
-
-				return bound;
-			}
-
-			public double Reduce()
-			{
-				return ReduceRows() + ReduceColumns();
-			}
-
-			public void IncludeEdge(int i, int j)
-			{
-				// Set all cells in the given column to infinity.
-				for (int _i = 0; _i < matrix.GetLength(0); _i++) {
-					matrix[_i, j] = Double.PositiveInfinity;
-				}
-
-				// Set all cells in the given row to infinity.
-				for (int _j = 0; _j < matrix.GetLength(1); _j++) {
-					matrix[i, _j] = Double.PositiveInfinity;
-				}
-			}
-
-			public void ExcludeEdge(int i, int j)
-			{
-				matrix[i, j] = Double.PositiveInfinity;
-			}
-
-			public CostMatrix Clone()
-			{
-				double[,] _matrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
-				matrix.CopyTo(_matrix, 0);
-				return new CostMatrix(_matrix);
-			}
-		}
-
 		private void searchForBetterSolution()
 		{
 			PriorityQueue<State> pq = new PriorityQueue<State>();
@@ -448,7 +298,7 @@ namespace TSP
 						if (isSolution(child) && child.lowerBound < bssf.costOfRoute())
 						{
 							
-							bssf = child.getRoute();
+							bssf = new TSPSolution(child.getRoute());
 							// we will prune as we deque from our special priority queue agenda
 						}
 						else 
@@ -467,6 +317,7 @@ namespace TSP
 		
 		private List<State> GenerateChildren(State state)
 		{
+			// todo
 			return new List<State>();	
 		}
 		
