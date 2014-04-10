@@ -336,10 +336,19 @@ namespace TSP
 			while (pq.Count > 0 /*&& timeRemains*/ && bssf.costOfRoute != initialState.lowerBound)
 			{
 				State u = pq.Dequeue();
-				
+				List<State> children = this.GenerateChildren(u);
+				foreach (State child in children)
+				{
+					
+				}
 			}
 			
 			
+		}
+		
+		private List<State> GenerateChildren(State state)
+		{
+			return new List<State>();	
 		}
 		
         /// <summary>
