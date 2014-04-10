@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Linq;
+using System.Diagnostics;
 
 namespace TSP
 {
@@ -276,6 +277,12 @@ namespace TSP
                 return -1D; 
         }
 		
+		
+		
+		// here and below is our code
+		private Stopwatch stopwatch = new Stopwatch();
+		
+		
 		private void searchForBetterSolution()
 		{
 			PriorityQueue<State> pq = new PriorityQueue<State>();
@@ -283,7 +290,7 @@ namespace TSP
 			State initialState = new State(initialCostMatrix, 0, 0, new Dictionary<City, City>());
 			pq.Enqueue(initialState);
 			
-			while (pq.Count() > 0 /*&& timeRemains*/ && bssf.costOfRoute() != initialState.lowerBound)
+			while (pq.Count() > 0 && stopwatch.ElapsedMilliseconds < 60000 && bssf.costOfRoute() != initialState.lowerBound)
 			{
 				State u = pq.Dequeue();
 				if (u.lowerBound > bssf.costOfRoute())
@@ -292,12 +299,11 @@ namespace TSP
 				List<State> children = this.GenerateChildren(u);
 				foreach (State child in children)
 				{
-					/* if (!timeRemains) break; */
+					if (stopwatch.ElapsedMilliseconds > 60000) break;
 					if (child.lowerBound < bssf.costOfRoute())
 					{
 						if (isSolution(child) && child.lowerBound < bssf.costOfRoute())
 						{
-							
 							bssf = new TSPSolution(child.getRoute());
 							// we will prune as we deque from our special priority queue agenda
 						}
@@ -308,6 +314,7 @@ namespace TSP
 					}	
 				}
 			}
+			stopwatch.Stop();
 		}
 		
 		private bool isSolution(State state)
@@ -327,6 +334,7 @@ namespace TSP
         /// </summary>
         public void solveProblem()
         {
+			stopwatch.Start();
             bssf = this.GetInitialBSSF(); 
 			searchForBetterSolution();
             			
