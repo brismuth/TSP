@@ -296,7 +296,7 @@ namespace TSP
 
 			public double reduce()
 			{
-
+				return 0;
 			}
 		}
 
