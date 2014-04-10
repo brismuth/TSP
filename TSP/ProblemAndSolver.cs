@@ -370,6 +370,22 @@ namespace TSP
 			{
 				return ReduceRows() + ReduceColumns();
 			}
+
+			public void IncludeEdge(int i, int j)
+			{
+				for (int _i = 0; _i < matrix.GetLength(0); _i++) {
+					matrix[_i, j] = Double.PositiveInfinity;
+				}
+
+				for (int _j = 0; _j < matrix.GetLength(1); _j++) {
+					matrix[i, _j] = Double.PositiveInfinity;
+				}
+			}
+
+			public void ExcludeEdge(int i, int j)
+			{
+				matrix[i, j] = Double.PositiveInfinity;
+			}
 		}
 
 		private void searchForBetterSolution()
