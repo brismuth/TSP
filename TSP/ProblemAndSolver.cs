@@ -275,6 +275,36 @@ namespace TSP
                 return -1D; 
         }
 
+		private class CostMatrix
+		{
+			private double[,] matrix;
+			private double bound = 0;
+
+			public CostMatrix(City[] cities)
+			{
+				matrix = new double[cities.Length,cities.Length];
+
+				for (int i = 0; i < cities.Length; i++)
+				{
+					for (int j = 0; j < cities.Length; j++)
+					{
+						if (i == j) matrix[i,j] = Double.PositiveInfinity;
+						matrix[i,j] = cities[i].costToGetTo(cities[j]);
+					}
+				}
+			}
+
+			public double reduce()
+			{
+
+			}
+		}
+
+		private void searchForBetterSolution()
+		{
+
+		}
+
         /// <summary>
         ///  solve the problem.  This is the entry point for the solver when the run button is clicked
         /// right now it just picks a simple solution. 
@@ -290,6 +320,7 @@ namespace TSP
             }
             // call this the best solution so far.  bssf is the route that will be drawn by the Draw method. 
             bssf = this.GetInitialBSSF(); 
+			searchForBetterSolution();
             // update the cost of the tour. 
             Program.MainForm.tbCostOfTour.Text = " " + bssf.costOfRoute();
             // do a refresh. 
