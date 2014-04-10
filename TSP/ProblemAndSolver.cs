@@ -331,6 +331,11 @@ namespace TSP
 				}
 			}
 
+			public CostMatrix(double[,] matrix)
+			{
+				this.matrix = matrix;
+			}
+
 			public double ReduceRows()
 			{
 				double bound = 0;
@@ -411,6 +416,13 @@ namespace TSP
 			public void ExcludeEdge(int i, int j)
 			{
 				matrix[i, j] = Double.PositiveInfinity;
+			}
+
+			public CostMatrix Clone()
+			{
+				double[,] _matrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
+				matrix.CopyTo(_matrix, 0);
+				return new CostMatrix(_matrix);
 			}
 		}
 
