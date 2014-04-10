@@ -281,14 +281,30 @@ namespace TSP
 			public CostMatrix costMatrix;
 			public int lowerBound;
 			public int depth;
-			public ArrayList edges;
+			public Dictionary<City, City> edges;
 			
-			public State(CostMatrix costMatrix, int lowerBound, int depth, ArrayList edges)
+			public State(CostMatrix costMatrix, int lowerBound, int depth, Dictionary<City, City> edges)
 			{
 				this.costMatrix = costMatrix;
 				this.lowerBound = lowerBound;
 				this.depth = depth;
 				this.edges = edges;
+			}
+			
+			public TSPSolution getRoute()
+			{
+				ArrayList route = new ArrayList();
+				City startCity = Enumerable.ToList(edges.Keys)[0];
+				City curCity = startCity;
+				bool fullroute = false;
+				do
+				{
+					route.Add(curCity);
+					curCity = edges[curCity];
+				}
+				while (curCity != startCity);
+				
+				return new TSPSolution(route);
 			}
 			
 			public int CompareTo(State state)
@@ -402,20 +418,39 @@ namespace TSP
 		{
 			PriorityQueue<State> pq = new PriorityQueue<State>();
 			CostMatrix initialCostMatrix = new CostMatrix(Cities);
-			State initialState = new State(initialCostMatrix, 0, 0, new ArrayList());
+			State initialState = new State(initialCostMatrix, 0, 0, new Dictionary<City, City>());
 			pq.Enqueue(initialState);
 			
 			while (pq.Count() > 0 /*&& timeRemains*/ && bssf.costOfRoute() != initialState.lowerBound)
 			{
 				State u = pq.Dequeue();
+				if (u.lowerBound > bssf.costOfRoute())
+					continue; // this is where we are pruning
+				
 				List<State> children = this.GenerateChildren(u);
 				foreach (State child in children)
 				{
-					
+					/* if (!timeRemains) break; */
+					if (child.lowerBound < bssf.costOfRoute())
+					{
+						if (isSolution(child) && child.lowerBound < bssf.costOfRoute())
+						{
+							
+							bssf = child.getRoute();
+							// we will prune as we deque from our special priority queue agenda
+						}
+						else 
+						{
+							pq.Enqueue(child);
+						}
+					}	
 				}
 			}
-			
-			
+		}
+		
+		private bool isSolution(State state)
+		{
+			return state.edges.Count == Cities.Length;
 		}
 		
 		private List<State> GenerateChildren(State state)
