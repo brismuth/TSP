@@ -277,10 +277,18 @@ namespace TSP
 		
 		private class State:IComparable<State>
 		{
-			public int lowerBound;
 			public CostMatrix costMatrix;
+			public int lowerBound;
 			public int depth;
 			public ArrayList edges;
+			
+			public State(CostMatrix costMatrix, int lowerBound, int depth, ArrayList edges)
+			{
+				this.costMatrix = costMatrix;
+				this.lowerBound = lowerBound;
+				this.depth = depth;
+				this.edges = edges;
+			}
 			
 			public int CompareTo(State state)
 			{
@@ -311,18 +319,29 @@ namespace TSP
 			{
 				return 0;
 			}
+			
+			public double getLowerBound()
+			{
+				return bound;	
+			}
 		}
 
 		private void searchForBetterSolution()
 		{
 			PriorityQueue<State> pq = new PriorityQueue<State>();
+			CostMatrix initialCostMatrix = new CostMatrix(Cities);
+			State initialState = new State(initialCostMatrix, initialCostMatrix.getLowerBound(), 0, new ArrayList());
+			pq.Enqueue(initialState);
 			
-			
-			
+			while (pq.Count > 0 /*&& timeRemains*/ && bssf.costOfRoute != initialState.lowerBound)
+			{
+				State u = pq.Dequeue();
+				
+			}
 			
 			
 		}
-
+		
         /// <summary>
         ///  solve the problem.  This is the entry point for the solver when the run button is clicked
         /// right now it just picks a simple solution. 
