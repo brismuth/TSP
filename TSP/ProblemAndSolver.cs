@@ -224,7 +224,45 @@ namespace TSP
             }
 
         }
-
+		
+		
+		/// <summary>
+		/// Gets the initial BSSF.
+		/// </summary>
+		/// <returns>
+		/// The initial BSSF. This is based on a greedy algorithm
+		/// </returns>
+		private TSPSolution GetInitialBSSF()
+		{
+			ArrayList visitedCities = new ArrayList();
+			City start = Cities[0];
+			Boolean fullLoop = false;
+			while (!fullLoop)
+			{
+				City nextCity = null;
+				double nextCost = double.MaxValue;
+				foreach (City city in Cities)
+				{
+					// only if we haven't been there or it is the last city to visit (return to start)
+					if (!visitedCities.Contains(city) && (city != start || visitedCities.Count == Cities.Length - 1)) 
+					{	
+						City fromCity = visitedCities.Count > 0 ? (City)visitedCities[visitedCities.Count - 1] : start;
+						double cost = fromCity.costToGetTo(city);
+						if (cost < nextCost)
+						{
+							nextCity = city;
+							nextCost = cost;
+						}
+					}
+				}
+				visitedCities.Add(nextCity);
+				if (nextCity == start)
+					fullLoop = true;
+			}
+			
+			return new TSPSolution(visitedCities);
+		}
+		
         /// <summary>
         ///  return the cost of the best solution so far. 
         /// </summary>
@@ -251,7 +289,7 @@ namespace TSP
                 Route.Add( Cities[Cities.Length - x -1]);
             }
             // call this the best solution so far.  bssf is the route that will be drawn by the Draw method. 
-            bssf = new TSPSolution(Route);
+            bssf = this.GetInitialBSSF(); 
             // update the cost of the tour. 
             Program.MainForm.tbCostOfTour.Text = " " + bssf.costOfRoute();
             // do a refresh. 
