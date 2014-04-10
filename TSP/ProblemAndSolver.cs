@@ -274,7 +274,20 @@ namespace TSP
             else
                 return -1D; 
         }
-
+		
+		private class State:IComparable<State>
+		{
+			public int lowerBound;
+			public CostMatrix costMatrix;
+			public int depth;
+			public ArrayList edges;
+			
+			public int CompareTo(State state)
+			{
+				return state.lowerBound.CompareTo(lowerBound);
+			}
+		}
+		
 		private class CostMatrix
 		{
 			private double[,] matrix;
@@ -302,7 +315,12 @@ namespace TSP
 
 		private void searchForBetterSolution()
 		{
-
+			PriorityQueue<State> pq = new PriorityQueue<State>();
+			
+			
+			
+			
+			
 		}
 
         /// <summary>
@@ -313,10 +331,7 @@ namespace TSP
         {
             bssf = this.GetInitialBSSF(); 
 			searchForBetterSolution();
-            
-			
-			
-			
+            			
 			// update the cost of the tour. 
             Program.MainForm.tbCostOfTour.Text = " " + bssf.costOfRoute();
             // do a refresh. 
