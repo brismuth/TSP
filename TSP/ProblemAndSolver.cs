@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using System.Data.Linq;
+using System.Linq;
 
 namespace TSP
 {
@@ -300,7 +300,6 @@ namespace TSP
 		private class CostMatrix
 		{
 			private double[,] matrix;
-			private double bound = 0;
 
 			public CostMatrix(City[] cities)
 			{
@@ -316,14 +315,60 @@ namespace TSP
 				}
 			}
 
-			public double reduce()
+			public double ReduceRows()
 			{
-				return 0;
+				double bound = 0;
+
+				for (int i = 0; i < matrix.GetLength(0); i++)
+				{
+					double lowest = Double.PositiveInfinity;
+					for (int j = 0; j < matrix.GetLength(1); j++)
+					{
+						if (matrix[i, j] < lowest) lowest = matrix[i, j];
+					}
+
+					if (lowest == 0 || Double.IsPositiveInfinity(lowest)) continue;
+
+					for (int j = 0; j < matrix.GetLength(1); j++)
+					{
+						matrix[i, j] -= lowest;
+					}
+
+					bound += lowest;
+				}
+
+				return bound;
 			}
-			
-			public double getLowerBound()
+
+
+			public double ReduceColumns()
 			{
-				return bound;	
+				double bound = 0;
+
+				for (int j = 0; j < matrix.GetLength(0); j++)
+				{
+					double lowest = Double.PositiveInfinity;
+					for (int i = 0; i < matrix.GetLength(1); i++)
+					{
+						if (matrix[i, j] < lowest) lowest = matrix[i, j];
+					}
+
+					if (lowest == 0 || Double.IsPositiveInfinity(lowest)) continue;
+
+					for (int i = 0; i < matrix.GetLength(1); i++)
+					{
+						matrix[i, j] -= lowest;
+					}
+
+					bound += lowest;
+				}
+
+				return bound;
+			}
+
+			public double Reduce()
+			{
+				return ReduceRows() + ReduceColumns();
 			}
 		}
 
@@ -331,10 +376,10 @@ namespace TSP
 		{
 			PriorityQueue<State> pq = new PriorityQueue<State>();
 			CostMatrix initialCostMatrix = new CostMatrix(Cities);
-			State initialState = new State(initialCostMatrix, initialCostMatrix.getLowerBound(), 0, new ArrayList());
+			State initialState = new State(initialCostMatrix, 0, 0, new ArrayList());
 			pq.Enqueue(initialState);
 			
-			while (pq.Count > 0 /*&& timeRemains*/ && bssf.costOfRoute != initialState.lowerBound)
+			while (pq.Count() > 0 /*&& timeRemains*/ && bssf.costOfRoute() != initialState.lowerBound)
 			{
 				State u = pq.Dequeue();
 				List<State> children = this.GenerateChildren(u);
