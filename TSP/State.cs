@@ -46,14 +46,12 @@ namespace TSP
 				return children;
 
 			CostMatrix cmA = this.costMatrix.IncludeEdge(IJ.Item1, IJ.Item2);
-			Dictionary<City, City> edgesA = new Dictionary<City, City>();
-			foreach (KeyValuePair<City, City> entry in this.edges) edgesA.Add(entry.Key, entry.Value);
+			Dictionary<City, City> edgesA = new Dictionary<City, City>(this.edges);
 			edgesA.Add(this.cities[IJ.Item1], this.cities[IJ.Item2]);
 			State stateA = new State(cmA, cmA.GetBound(), this.depth + 1, edgesA, cities);
 			
 			CostMatrix cmB = this.costMatrix.ExcludeEdge(IJ.Item1, IJ.Item2);
-			Dictionary<City, City> edgesB = new Dictionary<City, City>();
-			foreach (KeyValuePair<City, City> entry in this.edges) edgesB.Add(entry.Key, entry.Value);
+			Dictionary<City, City> edgesB = new Dictionary<City, City>(this.edges);
 			State stateB = new State(cmB, cmB.GetBound(), this.depth + 1, edgesB, cities);
 			                                              
 			children.Add(stateA);
