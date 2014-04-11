@@ -30,6 +30,8 @@ namespace TSP
 			do
 			{
 				route.Add(curCity);
+				if (!edges.ContainsKey(curCity))
+					return null;
 				curCity = edges[curCity];
 			}
 			while (curCity != startCity);
@@ -61,7 +63,7 @@ namespace TSP
 		
 		public int CompareTo(State state)
 		{
-			double s = 0.000005;
+			double s = 0.00000000000001;
 			double p1 = s * lowerBound + (1-s)*(cities.Length-depth);
 			double p2 = s * state.lowerBound + (1-s)*(cities.Length-state.depth);
 			return p1.CompareTo(p2);

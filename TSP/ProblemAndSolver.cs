@@ -295,8 +295,9 @@ namespace TSP
 			State initialState = new State(initialCostMatrix, 0, 0, new Dictionary<City, City>(), this.Cities);
 			pq.Enqueue(initialState);
 			
-			while (pq.Count() > 0 && stopwatch.ElapsedMilliseconds < 60000 && bssf.costOfRoute() != initialState.lowerBound)
+			while (pq.Count() > 0 && stopwatch.ElapsedMilliseconds < 30000 && bssf.costOfRoute() != initialState.lowerBound)
 			{
+				//Console.WriteLine(pq.Count());
 				State u = pq.Dequeue();
 				if (u.lowerBound > bssf.costOfRoute())
 					continue; // this is where we are pruning
@@ -304,13 +305,17 @@ namespace TSP
 				List<State> children = u.GetChildren();
 				foreach (State child in children)
 				{
-					if (stopwatch.ElapsedMilliseconds > 60000) break;
+					if (stopwatch.ElapsedMilliseconds > 30000) break;
 					if (child.lowerBound < bssf.costOfRoute())
 					{
+						var route = child.getRoute();
+						if (route != null && route.Count != Cities.Length)
+							continue;
+
 						if (isSolution(child) && child.lowerBound < bssf.costOfRoute())
 						{
-							var route = child.getRoute();
-							if (route.Count == Cities.Length) bssf = new TSPSolution(route);
+							Console.WriteLine("New BSSF");
+							bssf = new TSPSolution(route);
 							// we will prune as we deque from our special priority queue agenda
 						}
 						else 
