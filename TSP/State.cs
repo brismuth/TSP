@@ -25,7 +25,7 @@ namespace TSP
 		public ArrayList getRoute()
 		{
 			ArrayList route = new ArrayList();
-			City startCity = Enumerable.ToList(edges.Keys)[0];
+			City startCity = cities[0];
 			City curCity = startCity;
 			do
 			{
