@@ -52,7 +52,7 @@ namespace TSP
 			
 			CostMatrix cmB = this.costMatrix.ExcludeEdge(IJ.Item1, IJ.Item2);
 			Dictionary<City, City> edgesB = new Dictionary<City, City>(this.edges);
-			State stateB = new State(cmB, cmB.GetBound(), this.depth + 1, edgesB, cities);
+			State stateB = new State(cmB, cmB.GetBound(), this.depth, edgesB, cities);
 			                                              
 			children.Add(stateA);
 			children.Add(stateB);
@@ -61,8 +61,10 @@ namespace TSP
 		
 		public int CompareTo(State state)
 		{
-			// todo
-			return state.lowerBound.CompareTo(lowerBound);
+			double s = 0.000005;
+			double p1 = s * lowerBound + (1-s)*(cities.Length-depth);
+			double p2 = s * state.lowerBound + (1-s)*(cities.Length-state.depth);
+			return p1.CompareTo(p2);
 		}
 	}
 }

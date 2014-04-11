@@ -341,6 +341,7 @@ namespace TSP
             			
 			// update the cost of the tour. 
             Program.MainForm.tbCostOfTour.Text = " " + bssf.costOfRoute();
+			Program.MainForm.tbElapsedTime.Text = stopwatch.Elapsed.ToString();
             // do a refresh. 
             Program.MainForm.Invalidate();
         }
