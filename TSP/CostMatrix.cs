@@ -93,7 +93,12 @@ namespace TSP
 		{
 			return ReduceRows() + ReduceColumns();
 		}
-
+		
+		public Tuple<int, int> GetRecommendedIJ()
+		{
+			return new Tuple<int, int>(0,0);	
+		}
+		
 		public CostMatrix IncludeEdge(int i, int j)
 		{
 			CostMatrix copy = this.Clone();
@@ -112,8 +117,8 @@ namespace TSP
 
 			return copy;
 		}
-
-		private CostMatrix ExcludeEdge(int i, int j)
+		
+		public CostMatrix ExcludeEdge(int i, int j)
 		{
 			CostMatrix copy = this.Clone();
 			copy.matrix[i, j] = Double.PositiveInfinity;

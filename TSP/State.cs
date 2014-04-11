@@ -37,7 +37,10 @@ namespace TSP
 		
 		public List<State> GetChildren()
 		{
-			return new List<State>();	
+			List<State> children = new List<State>();
+			Tuple<int,int> IJ = this.costMatrix.GetRecommendedIJ();
+			children.Add(this.costMatrix.IncludeEdge(IJ.Item1, IJ.Item2));
+			children.Add(this.costMatrix.IncludeEdge(IJ.Item1, IJ.Item2));
 		}
 		
 		public int CompareTo(State state)
