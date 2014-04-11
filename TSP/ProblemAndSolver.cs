@@ -287,7 +287,7 @@ namespace TSP
 		{
 			PriorityQueue<State> pq = new PriorityQueue<State>();
 			CostMatrix initialCostMatrix = new CostMatrix(Cities);
-			State initialState = new State(initialCostMatrix, 0, 0, new Dictionary<City, City>());
+			State initialState = new State(initialCostMatrix, 0, 0, new Dictionary<City, City>(), this.Cities);
 			pq.Enqueue(initialState);
 			
 			while (pq.Count() > 0 && stopwatch.ElapsedMilliseconds < 60000 && bssf.costOfRoute() != initialState.lowerBound)
@@ -296,7 +296,7 @@ namespace TSP
 				if (u.lowerBound > bssf.costOfRoute())
 					continue; // this is where we are pruning
 				
-				List<State> children = state.GenerateChildren(u);
+				List<State> children = u.GetChildren();
 				foreach (State child in children)
 				{
 					if (stopwatch.ElapsedMilliseconds > 60000) break;

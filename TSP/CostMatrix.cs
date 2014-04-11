@@ -96,7 +96,18 @@ namespace TSP
 		
 		public Tuple<int, int> GetRecommendedIJ()
 		{
-			return new Tuple<int, int>(0,0);	
+			// Consider each row.
+			for (int i = 0; i < matrix.GetLength(0); i++)
+			{
+				// Find a 0
+				for (int j = 0; j < matrix.GetLength(1); j++)
+				{
+					if (matrix[i, j] == 0) return new Tuple<int, int>(i, j);
+				}
+			}
+			
+			
+			return null;	
 		}
 		
 		public CostMatrix IncludeEdge(int i, int j)
