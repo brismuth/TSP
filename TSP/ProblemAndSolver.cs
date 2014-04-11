@@ -309,7 +309,8 @@ namespace TSP
 					{
 						if (isSolution(child) && child.lowerBound < bssf.costOfRoute())
 						{
-							bssf = new TSPSolution(child.getRoute());
+							var route = child.getRoute();
+							if (route.Count == Cities.Length) bssf = new TSPSolution(route);
 							// we will prune as we deque from our special priority queue agenda
 						}
 						else 
