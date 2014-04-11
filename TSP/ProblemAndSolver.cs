@@ -211,7 +211,7 @@ namespace TSP
 
                 if (ps.Length > 0)
                 {
-                    g.DrawLines(routePenStyle, ps);
+                     g.DrawLines(routePenStyle, ps);
                     g.FillEllipse(cityBrushStartStyle, (float)Cities[0].X * width - 1, (float)Cities[0].Y * height - 1, CITY_ICON_SIZE + 2, CITY_ICON_SIZE + 2);
                 }
 
@@ -328,6 +328,7 @@ namespace TSP
         /// </summary>
         public void solveProblem()
         {
+			stopwatch.Restart();
 			stopwatch.Start();
             bssf = this.GetInitialBSSF(); 
 			searchForBetterSolution();

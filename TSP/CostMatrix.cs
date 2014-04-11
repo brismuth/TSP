@@ -16,7 +16,7 @@ namespace TSP
 				for (int j = 0; j < cities.Length; j++)
 				{
 					if (i == j) matrix[i,j] = Double.PositiveInfinity;
-					matrix[i,j] = cities[i].costToGetTo(cities[j]);
+					else matrix[i,j] = cities[i].costToGetTo(cities[j]);
 				}
 			}
 
@@ -96,18 +96,21 @@ namespace TSP
 		
 		public Tuple<int, int> GetRecommendedIJ()
 		{
+			int lastGoodRow = -1;
 			// Consider each row.
 			for (int i = 0; i < matrix.GetLength(0); i++)
 			{
 				// Find a 0
-				for (int j = 0; j < matrix.GetLength(1); j++)
+				for (int j = 1; j < matrix.GetLength(1); j++)
 				{
 					if (matrix[i, j] == 0) return new Tuple<int, int>(i, j);
 				}
+				if (matrix [i, 0] == 0)
+					lastGoodRow = i;
 			}
-			
-			
-			return null;	
+
+			//return null;	
+			return lastGoodRow == -1 ? null : new Tuple<int, int>(lastGoodRow, 0);
 		}
 		
 		public CostMatrix IncludeEdge(int i, int j)
@@ -123,6 +126,9 @@ namespace TSP
 			for (int _j = 0; _j < copy.matrix.GetLength(1); _j++) {
 				copy.matrix[i, _j] = Double.PositiveInfinity;
 			}
+
+			// Don't go back to the edge we just left
+			copy.matrix[j, i] = Double.PositiveInfinity;
 
 			copy.bound += copy.Reduce();
 
@@ -141,7 +147,9 @@ namespace TSP
  		{
  			double[,] _matrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
  			Array.Copy(matrix, _matrix, matrix.Length);
- 			return new CostMatrix(_matrix);
+			CostMatrix newCostMatrix = new CostMatrix (_matrix);
+			newCostMatrix.bound = this.bound;
+			return newCostMatrix;
  		}
 	}
 }

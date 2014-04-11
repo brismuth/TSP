@@ -41,7 +41,10 @@ namespace TSP
 		{
 			List<State> children = new List<State>();
 			Tuple<int,int> IJ = this.costMatrix.GetRecommendedIJ();
-			
+
+			if (IJ == null)
+				return children;
+
 			CostMatrix cmA = this.costMatrix.IncludeEdge(IJ.Item1, IJ.Item2);
 			Dictionary<City, City> edgesA = new Dictionary<City, City>();
 			foreach (KeyValuePair<City, City> entry in this.edges) edgesA.Add(entry.Key, entry.Value);

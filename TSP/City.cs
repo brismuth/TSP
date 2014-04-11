@@ -32,6 +32,11 @@ namespace TSP
             set { _Y = value; }
         }
 
+		public string ToString()
+		{
+			return X.ToString();
+		}
+
         /// <summary>
         /// how much does it cost to get from this to the destination?
         /// note that this is an asymmetric cost function
