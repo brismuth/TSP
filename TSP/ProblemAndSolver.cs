@@ -22,6 +22,8 @@ namespace TSP
             public ArrayList 
                 Route;
 
+			private double _cost = -1;
+
             public TSPSolution(ArrayList iroute)
             {
                 Route = new ArrayList(iroute);
@@ -35,6 +37,9 @@ namespace TSP
             /// <returns></returns>
             public double costOfRoute()
             {
+				if (_cost > -1)
+					return _cost;
+
                 // go through each edge in the route and add up the cost. 
                 int x;
                 City here; 
