@@ -296,7 +296,7 @@ namespace TSP
 				if (u.lowerBound > bssf.costOfRoute())
 					continue; // this is where we are pruning
 				
-				List<State> children = this.GenerateChildren(u);
+				List<State> children = state.GenerateChildren(u);
 				foreach (State child in children)
 				{
 					if (stopwatch.ElapsedMilliseconds > 60000) break;
@@ -320,12 +320,6 @@ namespace TSP
 		private bool isSolution(State state)
 		{
 			return state.edges.Count == Cities.Length;
-		}
-		
-		private List<State> GenerateChildren(State state)
-		{
-			// todo
-			return new List<State>();	
 		}
 		
         /// <summary>

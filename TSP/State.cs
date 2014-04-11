@@ -35,6 +35,11 @@ namespace TSP
 			return route;
 		}
 		
+		public List<State> GetChildren()
+		{
+			return new List<State>();	
+		}
+		
 		public int CompareTo(State state)
 		{
 			// todo
