@@ -140,7 +140,7 @@ namespace TSP
 		public CostMatrix Clone()
  		{
  			double[,] _matrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
- 			matrix.CopyTo(_matrix, 0);
+ 			Array.Copy(matrix, _matrix, matrix.Length);
  			return new CostMatrix(_matrix);
  		}
 	}
