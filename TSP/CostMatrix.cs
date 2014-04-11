@@ -4,7 +4,8 @@ namespace TSP
 {
 	class CostMatrix
 	{
-		private double[,] matrix;
+		protected double[,] matrix;
+		protected double bound;
 
 		public CostMatrix(City[] cities)
 		{
@@ -18,6 +19,8 @@ namespace TSP
 					matrix[i,j] = cities[i].costToGetTo(cities[j]);
 				}
 			}
+
+			bound = Reduce();
 		}
 		
 		public CostMatrix(double[,] matrix)
@@ -25,7 +28,9 @@ namespace TSP
 			this.matrix = matrix;
 		}
 
-		private double ReduceRows()
+		public double GetBound() { return bound; }
+
+		protected double ReduceRows()
 		{
 			double bound = 0;
 
@@ -55,7 +60,7 @@ namespace TSP
 		}
 
 
-		private double ReduceColumns()
+		protected double ReduceColumns()
 		{
 			double bound = 0;
 
@@ -84,27 +89,36 @@ namespace TSP
 			return bound;
 		}
 
-		private double Reduce()
+		protected double Reduce()
 		{
 			return ReduceRows() + ReduceColumns();
 		}
 
-		private void IncludeEdge(int i, int j)
+		public CostMatrix IncludeEdge(int i, int j)
 		{
+			CostMatrix copy = this.Clone();
+
 			// Set all cells in the given column to infinity.
-			for (int _i = 0; _i < matrix.GetLength(0); _i++) {
-				matrix[_i, j] = Double.PositiveInfinity;
+			for (int _i = 0; _i < copy.matrix.GetLength(0); _i++) {
+				copy.matrix[_i, j] = Double.PositiveInfinity;
 			}
 
 			// Set all cells in the given row to infinity.
-			for (int _j = 0; _j < matrix.GetLength(1); _j++) {
-				matrix[i, _j] = Double.PositiveInfinity;
+			for (int _j = 0; _j < copy.matrix.GetLength(1); _j++) {
+				copy.matrix[i, _j] = Double.PositiveInfinity;
 			}
+
+			copy.bound += copy.Reduce();
+
+			return copy;
 		}
 
-		private void ExcludeEdge(int i, int j)
+		private CostMatrix ExcludeEdge(int i, int j)
 		{
-			matrix[i, j] = Double.PositiveInfinity;
+			CostMatrix copy = this.Clone();
+			copy.matrix[i, j] = Double.PositiveInfinity;
+			copy.bound += copy.Reduce();
+			return copy;
 		}
 		
 		public CostMatrix Clone()
