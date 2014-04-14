@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using System.Linq;
 using System.Diagnostics;
 
 namespace TSP
@@ -295,7 +294,7 @@ namespace TSP
 			State initialState = new State(initialCostMatrix, 0, 0, new Dictionary<City, City>(), this.Cities);
 			pq.Enqueue(initialState);
 			
-			while (pq.Count() > 0 && stopwatch.ElapsedMilliseconds < 30000 && bssf.costOfRoute() != initialState.lowerBound)
+			while (pq.Count() > 0 && stopwatch.ElapsedMilliseconds < 60000 && bssf.costOfRoute() != initialState.lowerBound)
 			{
 				//Console.WriteLine(pq.Count());
 				State u = pq.Dequeue();
@@ -305,7 +304,7 @@ namespace TSP
 				List<State> children = u.GetChildren();
 				foreach (State child in children)
 				{
-					if (stopwatch.ElapsedMilliseconds > 30000) break;
+					if (stopwatch.ElapsedMilliseconds > 60000) break;
 					if (child.lowerBound < bssf.costOfRoute())
 					{
 						var route = child.getRoute();

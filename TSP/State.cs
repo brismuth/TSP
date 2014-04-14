@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
 
 namespace TSP
 {
@@ -12,7 +11,8 @@ namespace TSP
 		public int depth;
 		public Dictionary<City, City> edges;
 		private City[] cities;
-		
+		private ArrayList partialRoute;
+
 		public State(CostMatrix costMatrix, double lowerBound, int depth, Dictionary<City, City> edges, City[] cities)
 		{
 			this.costMatrix = costMatrix;
@@ -21,22 +21,36 @@ namespace TSP
 			this.edges = edges;
 			this.cities = cities;
 		}
-		
+
+		public State(CostMatrix costMatrix, double lowerBound, int depth, Dictionary<City, City> edges, City[] cities, ArrayList partialRoute)
+		{
+			this.costMatrix = costMatrix;
+			this.lowerBound = lowerBound;
+			this.depth = depth;
+			this.edges = edges;
+			this.cities = cities;
+			this.partialRoute = partialRoute;
+		}
+
 		public ArrayList getRoute()
 		{
-			ArrayList route = new ArrayList();
 			City startCity = cities[0];
-			City curCity = startCity;
-			do
-			{
-				route.Add(curCity);
-				if (!edges.ContainsKey(curCity))
-					return null;
-				curCity = edges[curCity];
+
+			if (partialRoute == null) {
+				partialRoute = new ArrayList ();
+				partialRoute.Add(startCity);
 			}
-			while (curCity != startCity);
-			
-			return route;
+
+			City curCity = partialRoute [partialRoute.Count-1] as City;
+
+			while (edges.ContainsKey(curCity))
+			{
+				if (edges[curCity] == startCity) return partialRoute;
+				partialRoute.Add(edges[curCity]);
+				curCity = edges [curCity];
+			}
+
+			return null;
 		}
 		
 		public List<State> GetChildren()
@@ -50,11 +64,11 @@ namespace TSP
 			CostMatrix cmA = this.costMatrix.IncludeEdge(IJ.Item1, IJ.Item2);
 			Dictionary<City, City> edgesA = new Dictionary<City, City>(this.edges);
 			edgesA.Add(this.cities[IJ.Item1], this.cities[IJ.Item2]);
-			State stateA = new State(cmA, cmA.GetBound(), this.depth + 1, edgesA, cities);
+			State stateA = new State(cmA, cmA.GetBound(), this.depth + 1, edgesA, cities, partialRoute == null ? null : partialRoute.Clone() as ArrayList);
 			
 			CostMatrix cmB = this.costMatrix.ExcludeEdge(IJ.Item1, IJ.Item2);
 			Dictionary<City, City> edgesB = new Dictionary<City, City>(this.edges);
-			State stateB = new State(cmB, cmB.GetBound(), this.depth, edgesB, cities);
+			State stateB = new State(cmB, cmB.GetBound(), this.depth, edgesB, cities, partialRoute == null ? null : partialRoute.Clone() as ArrayList);
 			                                              
 			children.Add(stateA);
 			children.Add(stateB);
