@@ -1,3 +1,5 @@
+*Note: this was built as a student project at BYU for CS 312 (algorithms)*
+
 TSP
 ===
 
